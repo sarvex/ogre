@@ -6,11 +6,11 @@ class Vector:
 	rep = None
 
 	def __init__(self, x, y=None, z=None, w=None):
-		if y == None: 
+		if y is None: 
 			self.rep = tuple(x)
-		elif z == None:
+		elif z is None:
 			self.rep = (x, y)
-		elif w == None:
+		elif w is None:
 			self.rep = (x, y, z)
 		else:
 			self.rep = (x, y, z, w)
@@ -72,11 +72,11 @@ class Vector:
 
 	def __str__(self):
 		s = ",".join(map(lambda x: "%.3f" % x, self.rep))
-		return '(' + s + ')'
+		return f'({s})'
 
 	def __repr__(self):
 		s = ",".join(map(lambda x: "%.3f" % x, self.rep))
-		return 'Vector(' + s + ')'
+		return f'Vector({s})'
 
 	# other functions
 

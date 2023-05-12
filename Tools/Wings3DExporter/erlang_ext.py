@@ -22,7 +22,7 @@ class erlang_atom:
 		return self.atom != other.atom
 
 	def __repr__(self):
-		return "atom <%s>" % self.atom
+		return f"atom <{self.atom}>"
 
 class erlang_ext_reader:
 
@@ -88,16 +88,14 @@ class erlang_ext_reader:
 		name = self.data.read(namelen)
 		if self.logging:
 			self.log_str("atom: %d %s" % (namelen, name))
-			self.log_data("ATOM %s" % name)
+			self.log_data(f"ATOM {name}")
 		return erlang_atom(name)
 
-	def	read_tuple(self, len):
+	def read_tuple(self, len):
 		if self.logging:
 			self.log_data("TUPLE [%d]" % len)
 			self.log_begin_block()
-		val = []
-		for i in range(len):
-			val.append(self.read_element())
+		val = [self.read_element() for _ in range(len)]
 		if self.logging:
 			self.log_end_block()
 		return tuple(val)
@@ -136,7 +134,7 @@ class erlang_ext_reader:
 			self.log_data("LIST [%d]" % len)
 			self.log_begin_block()
 		val = []
-		for i in range(len):
+		for _ in range(len):
 			#if self.depth == 5: self.log_str(str(i))
 			elem = self.read_element()
 			val.append(elem)
@@ -151,7 +149,7 @@ class erlang_ext_reader:
 		name = self.data.read(namelen)
 		if self.logging:
 			self.log_str("string: %d %s" % (namelen, name))
-			self.log_data('STRING %s' % repr(name))
+			self.log_data(f'STRING {repr(name)}')
 		return name
 
 	def read_binary(self):
@@ -178,16 +176,7 @@ class erlang_ext_reader:
 	def read_element_using_id(self, id):
 		#if self.depth == 5: self.log_str("read element %d" % id)
 
-		if id == 97: 
-			return self.read_small_int()
-
-		elif id == 98: 
-			return self.read_int()
-
-		elif id == 99: 
-			return self.read_float()
-
-		elif id == 100:
+		if id == 100:
 			return self.read_atom()
 
 		elif id == 104:
@@ -208,8 +197,17 @@ class erlang_ext_reader:
 		elif id == 109:
 			return self.read_binary()
 
+		elif id == 97:
+			return self.read_small_int()
+
+		elif id == 98:
+			return self.read_int()
+
+		elif id == 99:
+			return self.read_float()
+
 		else:
-			raise "problem " + str(id)
+			raise f"problem {str(id)}"
 
 	def read(self):
 		return self.read_element()

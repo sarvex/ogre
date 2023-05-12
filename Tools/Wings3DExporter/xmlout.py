@@ -14,7 +14,7 @@ class XMLDoc:
 
 	def saveFile(self, filename):
 		f = file(filename, "w")
-		f.write('<?xml version="' + self.version + '"?>\n')
+		f.write(f'<?xml version="{self.version}' + '"?>\n')
 		self.root_element._write(f, 0)
 
 	def saveFormatFile(self, filename, fmt):
@@ -35,10 +35,7 @@ class XMLNode:
 		doc.root_element = self
 	
 	def newChild(self, namespace, name, content):
-		if namespace:
-			fullname = namespace + ':' + name
-		else:
-			fullname = name
+		fullname = f'{namespace}:{name}' if namespace else name
 		child = XMLNode(fullname)
 		child.content = content
 		self.children.append(child)
@@ -55,7 +52,7 @@ class XMLNode:
 		tag = self.name
 		for prop in self.props:
 			name, value = prop
-			tag += ' ' + name + '="' + value + '"'
+			tag += f' {name}="{value}"'
 
 		# print tag, or children between tags
 		if self.children:

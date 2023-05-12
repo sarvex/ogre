@@ -3,7 +3,7 @@
 import sys
 from lxml import etree
 
-dtd = etree.DTD(sys.path[0]+"/dotscene.dtd")
+dtd = etree.DTD(f"{sys.path[0]}/dotscene.dtd")
 root = etree.parse(sys.argv[1])
 
 if dtd.validate(root):

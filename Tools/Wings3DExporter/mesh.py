@@ -31,8 +31,7 @@ class ColorProp:
 		if self.color:
 			r, g, b, a = self.color
 			r.append("color %.3f %.3f %.3f %.3f" % (r, g, b, a))
-		if r: return " ".join(r)
-		else: return "none"
+		return " ".join(r) if r else "none"
 
 
 # object material
@@ -58,7 +57,7 @@ class Material:
 		self.textures = []
 
 	def __repr__(self):
-		return 'Material("' + self.name + '")'
+		return f'Material("{self.name}")'
 	
 
 class GLVertex:
@@ -77,16 +76,15 @@ class GLVertex:
 				and self.material == other.material
 	
 	def __repr__(self):
-		seq = []
-		seq.append("pos:" + str(self.pos))
-		seq.append("normal:" + str(self.normal))
+		seq = [f"pos:{str(self.pos)}", f"normal:{str(self.normal)}"]
 		if self.uv != None: 
 			u, v = self.uv
 			seq.append("uv: (%.3f,%.3f)" % (u, v))
 		if self.color != None: 
 			r, g, b, a = self.color
 			seq.append("color: (%.3f,%.3f,%.3f,%.3f)" % (r, g, b, a))
-		if self.material != None: seq.append("material:" + repr(self.material))
+		if self.material != None:
+			seq.append(f"material:{repr(self.material)}")
 		return " ".join(seq)
 
 class SubMesh:
@@ -188,19 +186,15 @@ class Mesh:
 
 		same_smooth = []
 		buf = [face1]
-		while len(buf) > 0:
+		while buf:
 			face = buf.pop()
 			same_smooth.append(face)
 			for e in myedges:
 				f1, f2, v1, v2 = e
 				if face in [f1, f2] and vertex in [v1, v2]:
-					if face == f1:
-						otherface = f2
-					else:
-						otherface = f1
-					if otherface not in same_smooth:
-						if (f1, f2) not in self.hard_edges:
-							buf.append(otherface)
+					otherface = f2 if face == f1 else f1
+					if otherface not in same_smooth and (f1, f2) not in self.hard_edges:
+						buf.append(otherface)
 		#print same_smooth
 
 		return face2 in same_smooth
@@ -432,9 +426,13 @@ class Mesh:
 			v.pos = Vector(v.pos) * value
 
 	def find_material(self, mat_name):
-		for m in range(len(self.materials)):
-			if self.materials[m].name == mat_name:
-				return m
-		return None
+		return next(
+			(
+				m
+				for m in range(len(self.materials))
+				if self.materials[m].name == mat_name
+			),
+			None,
+		)
 
 

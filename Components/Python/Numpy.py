@@ -33,7 +33,7 @@ def view(o):
     to pass numpy arrays into Ogre use AsDataStream()
     """
     tp = ctypes.POINTER(ctypes.c_float)
-    
+
     if isinstance(o, Ogre.Vector2):
         shape = (2,)
         ptr = o.this
@@ -54,6 +54,6 @@ def view(o):
         shape = (o.getHeight(), o.getWidth(), Ogre.PixelUtil.getNumElemBytes(o.format))
         ptr = o.data
     else:
-        raise TypeError("do not know how to map '{}'".format(type(o).__name__))
-         
+        raise TypeError(f"do not know how to map '{type(o).__name__}'")
+
     return npc.as_array(ctypes.cast(int(ptr), tp), shape)

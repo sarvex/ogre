@@ -4,8 +4,8 @@ import sys
 import os.path
 from lxml import etree
 
-mesh_dtd = etree.DTD(sys.path[0]+"/ogremeshxml.dtd")
-skel_dtd = etree.DTD(sys.path[0]+"/ogreskeletonxml.dtd")
+mesh_dtd = etree.DTD(f"{sys.path[0]}/ogremeshxml.dtd")
+skel_dtd = etree.DTD(f"{sys.path[0]}/ogreskeletonxml.dtd")
 
 mesh = sys.argv[1]
 meshxml = etree.parse(sys.argv[1])
@@ -24,7 +24,9 @@ skel = meshxml.find("skeletonlink")
 if skel is None:
     sys.exit(ret)
 
-skelxml = etree.parse("{}/{}.xml".format(os.path.dirname(sys.argv[1]), skel.attrib["name"]))
+skelxml = etree.parse(
+    f'{os.path.dirname(sys.argv[1])}/{skel.attrib["name"]}.xml'
+)
 if skel_dtd.validate(skelxml):
     print("skeleton validation successful")
 else:

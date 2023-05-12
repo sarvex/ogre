@@ -28,11 +28,11 @@ class Triangulator:
 	def __init__(self, pgon):
 		self.pgon = pgon
 
-		self.dump("pgon: %s" % repr(self.pgon))
+		self.dump(f"pgon: {repr(self.pgon)}")
 
 		# normal used for direction calculation
 		self.normal = pgon_normal(pgon)
-		self.dump("normal: %s" % repr(self.normal))
+		self.dump(f"normal: {repr(self.normal)}")
 
 		# original indices
 		self.indices = range(len(self.pgon))

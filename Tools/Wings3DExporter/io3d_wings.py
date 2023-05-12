@@ -138,7 +138,7 @@ class wings_reader:
 					if elem[0] == erlang_atom('shininess'):
 						mat.shininess = elem[1]
 			elif a == erlang_atom('maps') and elem_data:
-				filename = str(atom) + '.png'
+				filename = f'{str(atom)}.png'
 				mat.textures.append(filename)
 				self.mat_images[elem_data[0][1]] = filename
 
@@ -147,8 +147,7 @@ class wings_reader:
 
 	def check_atom(self, atom, name):
 		if atom != erlang_atom(name):
-			raise IOError("Unexpected atom: %s expected, %s found" %
-					(erlang_atom(name), atom))
+			raise IOError(f"Unexpected atom: {erlang_atom(name)} expected, {atom} found")
 
 	def parse_2_edges(self, wobj, raw_edges, hard_edges):
 		faces = {}
@@ -310,9 +309,7 @@ def read_wings(filename, writeImages, keepRotation):
 	raw_data = e.read()
 
 	ob = wings_reader(raw_data, writeImages, keepRotation)
-	scene = ob.parse()
-
-	return scene
+	return ob.parse()
 
 if __name__ == '__main__':
 	try:

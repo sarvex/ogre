@@ -117,7 +117,7 @@ class ogre_writer:
 			geometry_elem = submesh_elem.newChild(None, "geometry", None)
 			self.add_geometry(geometry_elem, submesh.glverts)
 		submesh_elem.setProp("use32bitindexes", "false")
-		submesh_elem.setProp("operationtype", str("triangle_list"))
+		submesh_elem.setProp("operationtype", "triangle_list")
 
 	def write(self, filename):
 		self.xmldoc.saveFormatFile(filename, 1)
